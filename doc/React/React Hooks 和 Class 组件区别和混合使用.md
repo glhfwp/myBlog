@@ -41,7 +41,7 @@ Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情�
 
 - `render`：这是函数组件体本身。
 
-- `componentDidMount`, `componentDidUpdate`： `useLayoutEffect`： [useEffect Hook](https://zh-hans.reactjs.org/docs/hooks-effect.html) 可以表达所有这些(包括`不那么常见`的场景)的组合。
+- `componentDidMount`, `componentDidUpdate`： `useLayoutEffect`： useEffect Hook 可以表达所有这些(包括`不那么常见`的场景)的组合。
 
   可以把 `useEffect Hook` 看做 `componentDidMount`，`componentDidUpdate` 和 `componentWillUnmount` 这三个函数的组合。
 
