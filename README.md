@@ -2,6 +2,6 @@
 
 ## 随笔
 
-- React Hooks 和 Class 组件区别和混合使用
+1. React Hooks 和 Class 组件区别和混合使用
 
 
