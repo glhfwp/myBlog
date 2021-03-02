@@ -92,6 +92,7 @@ export default React.memo(function({data}){
 #### 1.5 `componentDidMount`, `componentDidUpdate`, `componentWillUnmount`： useEffect Hook
 
 1、 可以把 `useEffect Hook` 看做 `componentDidMount`，`componentDidUpdate` 和 `componentWillUnmount` 这三个函数的组合。
+
 注意 React 会等待浏览器完成画面渲染之后才会延迟调用 `useEffect`，因此会使得额外操作很方便。与 `componentDidMount` 或 `componentDidUpdate` 不同，使用 `useEffect` 调度的 effect 不会阻塞浏览器更新屏幕，这让你的应用看起来响应更快。大多数情况下，effect 不需要同步地执行。在个别情况下（例如测量布局），有单独的 `useLayoutEffect Hook` 供你使用，其 API 与 `useEffect` 相同。
 
 ```js
@@ -106,6 +107,7 @@ useEffect(() => {
 ```
 
 2、 例子如下
+
 类组件：
 
 ```js
@@ -137,6 +139,7 @@ function useVisibilityChange() {
 ```
 
 生命周期明显更偏向于传统的事件驱动，而 React Hooks 数据驱动的特性能够变得更纯粹。
+
 我们不需要考虑生命周期，我们可以使用多个 useEffect ，或者多个自定义 Hooks 来区分开多个无关联的逻辑代码段，保障高内聚特性。
 
 #### 1.6 `componentWillUnmount`：相当于 `useEffect `里面返回的清理函数
@@ -170,28 +173,45 @@ useEffect(() => {
 ## 二、 优缺点对比
 
 **函数组件**
+
 **特性：**
+
 1、 无状态组件，无 state 和生命周期，无实例化的 this。
+
 2、 逻辑简单容易复用
 
 **类组件：**
+
 **特性：**
+
 1、 需要继承自 Component；
+
 2、 内部可以定义自己的 state，用来保存组件自己内部的状态，而函数组件每次调用都会产生新的临时变量；
+
 3、 使用组件自己的生命周期，可以在对应的生命周期中完成自己的逻辑；
+
 **缺点：**
+
 1、 复杂组件变得难以理解，最初编写 class 组件时，往往逻辑比较简单，但是业务增多，class 组件代码就会越来越复杂；
+
 2、 高阶组件和 renderProps 设计的目的就是解决状态的复用的，但是多次使用高阶组件会产生太多的嵌套。
 
 **Hooks**
+
 **特性：**
+
 1、 就是一套能够使函数组件更强大，更灵活的钩子函数；
+
 2、 基本可以替代 class 组件(目前暂时还没有对应不常用的 getSnapshotBeforeUpdate，getDerivedStateFromError 和 componentDidCatch 生命周期的 Hook 等价写法)；
+
 3、 若项目比较旧，并不需要直接将所有代码重构为 Hook，因为它完全向下兼容，可以渐进式地来使用；
+
 4、 你不能在 class 组件内部使用 Hook，但毫无疑问你可以在组件树里混合使用 class 组件和使用了 Hook 的函数组件。不论一个组件是 class 还是一个使用了 Hook 的函数，都只是这个组件的实现细节而已。
 
 **优点**
+
 1、 抽离状态处理逻辑，不再需要关注类组件复杂的生命周期和 this 指向问题。
+
 2、 逻辑简单容易复用，更容易做到组件化和逻辑拆分，代码量更少。
 
 ## 三、 一些注意点
@@ -254,6 +274,7 @@ class Img2 extends PureComponent {
 Hooks 组件：useState/useReducer
 
 两者的状态值都被挂载在组件实例对象 FiberNode 的 memoizedState 属性中。
+
 但两者保存状态值的数据结构完全不同，Clss 组件是直接把 state 属性中挂载的这个开发者自定义的对象给保存到 memoizedState 属性中，而 React Hooks 是用链表来保存状态的，memoizedState 属性保存的实际上是这个链表的头指针。
 
 ```js
@@ -272,8 +293,11 @@ export type Hook = {
 **类组件 setState**
 
 this.setState() 将对组件 state 的更改排入队列批量推迟更新，并通知 React 需要使用更新后的 state 重新渲染此组件及其子组件。其实 setState 实际上不是异步，只是代码执行顺序不同，有了异步的感觉。
+
 setState 在合成事件(onClick)、生命周期函数中是异步
+
 setState 在原生事件(addEventListener)、setTimeout/setInterval/Promise 等异步执行的代码中是同步
+
 原生事件绑定不会通过合成事件的方式处理，自然也不会进入更新事务的处理流程。setTimeout 也一样，在 setTimeout 回调执行时已经完成了原更新组件流程，不会放入进行异步更新，其结果自然是同步的。
 
 **Hooks 组件更新状态的函数 dispatcher**
