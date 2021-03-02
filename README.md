@@ -2,6 +2,5 @@
 
 ## 随笔
 
-1. React Hooks 和 Class 组件区别和混合使用
-
-
+1. React Hooks 和类组件对比
+2. ES7-ES12 简介
