@@ -170,6 +170,8 @@ useEffect(() => {
 | componentDidCatch        | 无                          |
 | getDerivedStateFromError | 无                          |
 
+---
+
 ## 二、 优缺点对比
 
 **函数组件**
@@ -213,6 +215,8 @@ useEffect(() => {
 1、 抽离状态处理逻辑，不再需要关注类组件复杂的生命周期和 this 指向问题。
 
 2、 逻辑简单容易复用，更容易做到组件化和逻辑拆分，代码量更少。
+
+---
 
 ## 三、 一些注意点
 
@@ -312,6 +316,8 @@ useEffect(() => {
   setName(name => name + 'c') // 'abc'
 }, [])
 ```
+
+---
 
 ## 参考
 
