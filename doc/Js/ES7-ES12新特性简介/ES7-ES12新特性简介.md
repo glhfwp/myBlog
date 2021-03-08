@@ -119,14 +119,16 @@ let arr = [
 
 ECMAScript 共享内存与 Atomics 的规范
 
-```
-参考
+**参考**
 https://exploringjs.com/es2016-es2017/ch_shared-array-buffer.html
+
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
+
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Int32Array
+
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Atomics
+
 http://www.ruanyifeng.com/blog/2017/09/asmjs_emscripten.html
-```
 
 这是 ECMAScript 共享内存与 Atomics 的规范，它引入了一个新的构造函数 SharedArrayBuffer 和一个 Atomics 带有辅助函数的名称空间对象。
 
