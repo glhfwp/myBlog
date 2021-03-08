@@ -120,6 +120,7 @@ let arr = [
 ECMAScript 共享内存与 Atomics 的规范
 
 **参考**
+
 https://exploringjs.com/es2016-es2017/ch_shared-array-buffer.html
 
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
