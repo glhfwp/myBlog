@@ -64,6 +64,21 @@ for (let i = 0; i < 2 ** 10; i++) {
   const bin = (i >>> 0).toString(2)
   arr.push(bin.padStart(10, '0').split(''))
 }
+
+// 不用新方法
+const arr = []
+for (let i = 0; i < 1024; i++) {
+  const bin = (i >>> 0).toString(2)
+  arr.push(
+    bin.length < 10
+      ? Array.apply(null, {
+          length: 10 - bin.length,
+        })
+          .map(v => 0)
+          .concat(bin.split('').map(v => Number(v)))
+      : bin.split('').map(v => Number(v)),
+  )
+}
 ```
 
 ### 3. Object.getOwnPropertyDescriptors
