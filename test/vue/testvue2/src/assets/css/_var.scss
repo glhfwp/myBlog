@@ -1,0 +1,22 @@
+@charset "utf-8";
+
+// 背景
+$bg: #F4F4F4;
+$bgfff: #fff;
+// 分隔线边框
+$borderColor: #eee;
+// 分隔线边框
+$borderWeak: #999;
+// 正文
+$cMain: #333;
+// 辅助文案
+$cMainWeak: #999;
+
+// z-index
+$z-index-description: 50;
+$z-index-mask: 100;
+$z-index-popup: 200;
+$z-index-alert: 500;
+$z-index-modal: 500;
+$z-index-loading: 600;
+$z-index-toast: 999;

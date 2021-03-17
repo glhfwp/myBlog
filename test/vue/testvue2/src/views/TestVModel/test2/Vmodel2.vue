@@ -1,8 +1,8 @@
 <template>
   <div class="test-vmodel2">
     <div @click="showDialog">点击弹窗</div>
+    <!-- <MyDialog :isShowDialog.sync="isShowDialog" @showDialogCb="showDialogCb"> -->
     <MyDialog v-model="isShowDialog" @showDialogCb="showDialogCb">
-      <!-- <MyDialog :isShowDialog.sync="isShowDialog" @showDialogCb="showDialogCb"> -->
       <div class="test-dialog">
         <h3>test-dialog</h3>
         <p @click.stop="showDialogCb">父组件点击关闭(父组件的关闭需要回调)</p>
@@ -46,7 +46,7 @@ export default {
   ::v-deep .my-dialog-main {
     width: 300px;
     height: 400px;
-    background: #fff;
+    background: $bgfff;
     margin: 300px auto;
     .test-dialog {
       text-align: center;
