@@ -1,0 +1,19 @@
+{
+  "brace_style": "none,preserve-inline",
+  "indent_size": 2,
+  "indent_char": " ",
+  "jslint_happy": true,
+  "unformatted": [
+    ""
+  ],
+  "css": {
+    "allowed_file_extensions": [
+      "css",
+      "scss",
+      "sass",
+      "less"
+    ],
+    "newline_between_rules": false,
+    "selector_separator_newline": false
+  }
+}
