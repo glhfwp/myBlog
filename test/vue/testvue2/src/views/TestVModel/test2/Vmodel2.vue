@@ -1,13 +1,17 @@
 <template>
   <div class="test-vmodel2">
     <div @click="showDialog">点击弹窗</div>
-    <!-- <MyDialog :isShowDialog.sync="isShowDialog" @showDialogCb="showDialogCb"> -->
+    <!-- v-model -->
     <MyDialog v-model="isShowDialog" @showDialogCb="showDialogCb">
       <div class="test-dialog">
         <h3>test-dialog</h3>
         <p @click.stop="showDialogCb">父组件点击关闭(父组件的关闭需要回调)</p>
       </div>
     </MyDialog>
+    <!-- .sync -->
+    <!-- <MyDialog :isShowDialog.sync="isShowDialog" @showDialogCb="showDialogCb">同上...</MyDialog> -->
+    <!-- .sync语法展开 -->
+    <!-- <MyDialog :isShowDialog="isShowDialog" @update:isShowDialog="isShowDialog = $event" @showDialogCb="showDialogCb">同上...</MyDialog> -->
   </div>
 </template>
 

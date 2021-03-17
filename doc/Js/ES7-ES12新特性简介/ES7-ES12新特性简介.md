@@ -317,7 +317,7 @@ ES2018 adds support for lookbehind assertions.
 ```js
 const re = /(?<=\$)\d+/
 re.exec('$1 is worth about ¥123') // ["1", index: 1, input: "$1 is worth about ¥123", groups: undefined]
-re.exec('$111') // ["199", index: 1, input: "$199", groups: undefined]
+re.exec('$111') // ["111", index: 1, input: "$111", groups: undefined]
 ```
 
 2、 Negative lookbehind 否定的向后断言用 `(?<!...)`
