@@ -77,7 +77,9 @@
 ### 2、 v-model 处理非输入控件
 
 1）直接在子组件改值会报语法错误`Avoid mutating a prop directly since the value will be overwritten whenever the parent component re-renders. Instead, use a data or computed property based on the prop's value. Prop being mutated: "isShowDialog"`。
+
 2）在父组件用`ref`修改子组件的属性时机有时不够准确。
+
 所以我们平时写自定义组件用`v-model`不是专门处理输入控件的，一般使用`update`。
 
 ```html
