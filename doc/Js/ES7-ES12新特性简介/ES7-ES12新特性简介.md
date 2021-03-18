@@ -525,7 +525,10 @@ const str = 'test1test2'
 const array = [...str.matchAll(regexp)] // RegExpStringIterator
 console.log(array[0]) // expected output: Array ["test1", "e", "st1", "1"]
 console.log(array[1]) // expected output: Array ["test2", "e", "st2", "2"]
-console.log(str.match(regexp)) // ["test1", "test2"]
+
+console.log(str.match(regexp)) // ["test1", "test2"] 没有子项
+const regexp2 = /t(e)(st(\d?))/
+console.log(str.match(regexp2)) // expected output: Array ["test1", "e", "st1", "1"] 没有test2
 ```
 
 ### 2. import()
@@ -548,9 +551,15 @@ let module = await import('/modules/my-module.js').then(module => {
 
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/BigInt
 
-BigInt 是一种内置对象，它提供了一种方法来表示大于 `2**53 - 1` 的整数。这原本是 Javascript 中可以用 `Number` 表示的最大数字。BigInt 可以表示任意大的整数。
+Number 类型只能安全的表示 `Number.MIN_SAFE_INTEGER` `-(2 ** 53-1)`至 `Number.MAX_SAFE_INTEGER` `2 ** 53-1` 范围的值。js 使用 64 位浮点数处理所有计算，直接导致了运算效率低下，这个提案弥补了 js 的计算缺点
 
-js 使用 64 位浮点数处理所有计算，直接导致了运算效率低下，这个提案弥补了 js 的计算缺点
+```js
+let num = Number.MAX_SAFE_INTEGER // 9007199254740991
+console.log(num + 1) // 9007199254740992
+console.log(num + 2) // 9007199254740992
+```
+
+BigInt 是一种内置对象，它提供了一种方法来表示大于 `Number.MAX_SAFE_INTEGER` 的整数。BigInt 可以表示任意大的整数。
 
 #### 描述
 
@@ -580,6 +589,7 @@ typeof Object(1n) // 'object'
 以下操作符可以和 BigInt 一起使用： +、`*`、`-`、`**`、`%` 。除 >>> （无符号右移）之外的 位操作 也可以支持。因为 BigInt 都是有符号的， >>> （无符号右移）不能用于 BigInt。为了兼容 asm.js ，BigInt 不支持单目 (+) 运算符。
 
 ```js
+Number.MIN_SAFE_INTEGER === - (2**53 -1) // -9007199254740991
 Number.MAX_SAFE_INTEGER === 2**53 -1 // 9007199254740991
 const previousMaxSafe = BigInt(Number.MAX_SAFE_INTEGER); // ↪ 9007199254740991n
 const maxPlusOne = previousMaxSafe + 1n; // ↪ 9007199254740992n
@@ -638,17 +648,11 @@ Boolean(12n) // ↪ true
 !0n // ↪ true
 ```
 
-#### 静态方法
-
-[`BigInt.asIntN()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/BigInt/asIntN) 将 BigInt 值转换为一个 `-2 ** width-1` 与 `2 ** width-1 -1` 之间的有符号整数。
-
-[`BigInt.asUintN()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/BigInt/asUintN)将一个 BigInt 值转换为 0 与 `2 ** width-1` 之间的无符号整数。
-
 #### 使用建议
 
 **转化**
 
-由于在 Number 与 BigInt 之间进行转换会损失精度，因而建议仅在值可能大于 253 时使用 BigInt 类型，并且不在两种类型之间进行相互转换。
+由于在 Number 与 BigInt 之间进行转换会损失精度，因而建议仅在值可能大于 `2**53` 时使用 BigInt 类型，并且不在两种类型之间进行相互转换。
 
 **密码学**
 
@@ -656,7 +660,7 @@ Boolean(12n) // ↪ true
 
 **在 JSON 中使用**
 
-对任何 BigInt 值使用 JSON.stringify() 都会引发 TypeError，因为默认情况下 BigInt 值不会在 JSON 中序列化。但是，如果需要，可以实现 toJSON 方法：
+对任何 BigInt 值使用 `JSON.stringify()` 都会引发 `TypeError`，因为默认情况下 BigInt 值不会在 JSON 中序列化。但是，如果需要，可以实现 toJSON 方法：
 
 ```js
 BigInt.prototype.toJSON = function () {
@@ -671,11 +675,9 @@ JSON.stringify(BigInt(1))
 
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled
 
-该 Promise.allSettled()方法返回一个在所有给定的 promise 都已经 fulfilled 或 rejected 后的 promise，并带有一个对象数组，每个对象表示对应的 promise 结果。
+`Promise.all()` 有并发执行异步任务的能力，但它的最大问题就是如果其中某个任务 `reject`，所有任务都会挂掉，Promise 直接 `reject` 状态执行 `catch` 回调。适合当有任何一个任务 `reject` 时立即结束的场景。
 
-当您有多个彼此不依赖的异步任务成功完成时，或者您总是想知道每个 promise 的结果时，通常使用它。
-
-相比之下，Promise.all() 更适合彼此相互依赖或者在其中任何一个 reject 时立即结束。
+`Promise.allSettled()` 方法返回一个在所有给定的 `promise` 都已经 `fulfilled` 或 `rejected` 后的 `promise`，并带有一个对象数组，每个对象表示对应的 `promise` 结果。当您有多个彼此不依赖的异步任务成功完成时，或者您总是想知道每个 promise 的结果时，通常使用它。
 
 ```js
 const promise1 = Promise.resolve(3)
@@ -685,6 +687,7 @@ const promises = [promise1, promise2]
 Promise.allSettled(promises).then(results => {
   console.log(results)
   results.forEach(result => console.log(result.status))
+  // 再通过filter过滤出想要的状态 result.status === 'fulfilled'
 })
 // [{status: "fulfilled", value: 3},{status: "rejected", reason: "foo"}]
 // "fulfilled"
@@ -711,10 +714,26 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 你可以安心的使用 globalThis，不必担心它的运行环境。为便于记忆，你只需要记住，全局作用域中的 this 就是 globalThis。
 
-```
-浏览器：window、self、frames
-worker：self
-node：global
+```js
+// 浏览器：window、self、frames
+// worker：self
+// node：global
+var getGlobal = function () {
+  if (typeof self !== 'undefined') {
+    return self
+  }
+  if (typeof window !== 'undefined') {
+    return window
+  }
+  if (typeof global !== 'undefined') {
+    return global
+  }
+  throw new Error('unable to locate global object')
+}
+var globals = getGlobal()
+if (typeof globals.setTimeout !== 'function') {
+  // 此环境中没有 setTimeout 方法！
+}
 ```
 
 ### 6. for-in mechanics
@@ -725,12 +744,12 @@ for-in 循环时候的输出顺序
 
 ### 7. Optional Chaining 可选链
 
-?.用户检测不确定的中间节点
+可选链 `?.` 用于检测多层对象中不确定的中间节点，不用再做冗余的容错。
 
 ```js
 let user = {}
-let u1 = user.childer.name // TypeError: Cannot read property 'name' of undefined
-let u1 = user.childer?.name // undefined
+let name = user.info.name // TypeError: Cannot read property 'name' of undefined
+let name = user.info?.name // undefined
 ```
 
 ### 8. Nullish coalescing Operator
@@ -739,33 +758,18 @@ let u1 = user.childer?.name // undefined
 
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
 
-空值合并操作符（??）是一个逻辑操作符，当左侧的操作数为 null 或者 undefined 时，返回其右侧操作数，否则返回左侧操作数。
-与逻辑或操作符（||）不同，逻辑或操作符会在左侧操作数为假值时返回右侧操作数。也就是说，如果使用 || 来为某些变量设置默认值，可能会遇到意料之外的行为。比如为假值（例如，'' 或 0）时。见下面的例子。
+以前，如果想为一个变量赋默认值，通常的做法是使用逻辑或操作符`||`，然而，由于 `||` 是一个布尔逻辑运算符，左侧的操作数会被强制转换成布尔值用于求值。任何假值`0， ''， NaN， null， undefined`都不会被返回。
+
+空值合并操作符 `??` 是一个逻辑操作符，当左侧的操作数为 `null` 或者 `undefined` 时，返回其右侧操作数，否则返回左侧操作数。
 
 ```js
-const foo = null ?? 'default string'
-console.log(foo) // "default string"
-
-const baz = 0 ?? 42
-console.log(baz) // 0
-```
-
-**为变量赋默认值**
-
-以前，如果想为一个变量赋默认值，通常的做法是使用逻辑或操作符（||）：
-然而，由于 || 是一个布尔逻辑运算符，左侧的操作数会被强制转换成布尔值用于求值。任何假值（0， ''， NaN， null， undefined）都不会被返回。这导致如果你使用 0，''或 NaN 作为有效值，就会出现不可预料的后果。
-
-```js
-let count = 0
-let text = ''
-let qty = count || 42
-let message = text || 'hi!'
-console.log(qty) // 42，而不是 0
-console.log(message) // "hi!"，而不是 ""
-let qty2 = count ?? 42
-console.log(qty2) // 0
-let message2 = text || 'hi!'
-console.log(message2) // ''
+console.log(0 || 42) // 42
+console.log('' || 'hi!') // "hi!"
+console.log(0 ?? 42) // 0
+console.log('' ?? 'hi!') // ''
+console.log(false ?? 'hi!') // false
+console.log(null ?? 'hi!') // "hi!"
+console.log(undefined ?? 'hi!') // "hi!"
 ```
 
 **短路**
@@ -798,13 +802,20 @@ console.log(B() ?? C())
 
 **不能与 AND 或 OR 操作符共用**
 
-将 ?? 直接与 AND（&&）和 OR（||）操作符组合使用是不可取的，应当是因为空值合并操作符和其他逻辑操作符之间的运算优先级/运算顺序是未定义的）这种情况下会抛出 SyntaxError 。
-但是，如果使用括号来显式表明运算优先级，是没有问题的。
+将`??`直接与`&&`和 `||`操作符组合使用会报错，应当是因为空值合并操作符和其他逻辑操作符之间的运算优先级/运算顺序是未定义的）这种情况下会抛出 `SyntaxError` 。但是，如果使用括号来显式表明运算优先级，是没有问题的。
 
 ```js
 null || undefined ?? "foo"; // Uncaught SyntaxError: Unexpected token '??'
 true || undefined ?? "foo"; // 抛出 SyntaxError
 (null || undefined ) ?? "foo"; // 返回 "foo"
+```
+
+**实际应用**
+
+单独应用场景不大，不如强类型判断。一般配合可选链使用
+
+```js
+console.log(user.info?.name ?? '默认名字')
 ```
 
 ### 9. import.meta
@@ -833,7 +844,6 @@ import.meta 对象是由 ECMAScript 实现的，它带有一个 null 的原型�
 <script type="module">
   // index.mjs
   import './index.mjs?someURLInfo=5'
-
   // index2.mjs
   new URL(import.meta.url).searchParams.get('someURLInfo') // 5
 </script>
