@@ -39,7 +39,7 @@ export default {
     close() {
       this.isShow = false
       this.$emit('update:isShowDialog', false)
-      // 为了处理回调操作
+      // 为了处理回调操作，除非v-model和.sync的语法糖是展开的，否则都需要额外的回调来处理数据。
       this.$emit('showDialogCb', false)
     },
   },
