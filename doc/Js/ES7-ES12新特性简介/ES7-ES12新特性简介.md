@@ -958,7 +958,7 @@ let amount = 1_234_500 // 1,234,500
 
 [tc39 proposals](https://github.com/tc39/proposals)
 
-[Finished Proposals](https://github.com/tc39/proposals/blob/master/finished-proposals.md)
+[Finished Proposals](https://github.com/tc39/proposals/blob/master/finished-proposals.md) 最终提案是指已到达第 4 阶段的提案，并已包含在规范的最新草案中。
 
 [TC39, ECMAScript, and the Future of JavaScript](https://ponyfoo.com/articles/tc39-ecmascript-proposals-future-of-javascript)
 
