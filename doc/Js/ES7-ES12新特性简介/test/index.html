@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="numdiv"></div>
+  <button id="start">开始</button>
+  <button id="stop">停止</button>
+
+  <script>
+    // https://stackoverflow.com/questions/45439334/javascript-synchronize-sharedarraybuffer-to-main-thread
+    var numdiv;
+    var work = null;
+    window.onload = function () {
+      numdiv = document.getElementById("numdiv");
+      start = document.getElementById("start");
+      stop = document.getElementById("stop");
+
+      start.onclick = startwork;
+      stop.onclick = function () {
+        work.terminate(); //终止 web worker，并释放资源
+        work = null;
+      }
+    }
+
+    function startwork() {
+      //判断浏览器是否支持worker
+      if (typeof (Worker) !== "undefined") {
+        //判断worker对象work是否存在，不存在则创建，指定work.js的文件路径
+        if (typeof (work) == "undefined" || work == null) {
+          work = new Worker("./worker.js");
+        }
+        //监听事件，当web worker传递消息时，会执行事件监听器中的代码
+        work.onmessage = function (e) {
+          let data = e.data;
+          numdiv.innerHTML = data
+          console.log(data) // Int32Array(10) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
+      } else {
+        numdiv.innerHTML = "您的浏览器不支持worker"
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -123,7 +123,6 @@ let arr = [
   'green',
   'blue',
 ];
-
 ```
 
 ### 5. async/await
@@ -140,6 +139,8 @@ https://exploringjs.com/es2016-es2017/ch_shared-array-buffer.html
 
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
 
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
+
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Int32Array
 
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Atomics
@@ -154,7 +155,7 @@ SharedArrayBuffer 对象用来表示一个通用的，固定长度的原始二�
 /**
  * new SharedArrayBuffer(length)
  * @param {*} length 所创建的数组缓冲区的大小，以字节(byte)为单位。
- * @returns {SharedArrayBuffer} 一个大小指定的新 SharedArrayBuffer 对象。其内容被初始化为 0。
+ * @returns {SharedArrayBuffer} 一个大小指定的新 SharedArrayBuffer 对象。其内容被初始化为 0。兼容性很差。
  */
 const buffer = new SharedArrayBuffer(10)
 console.log(buffer.byteLength) // 10
@@ -171,33 +172,34 @@ Atomics 对象提供了一组静态方法对 SharedArrayBuffer 和 ArrayBuffer �
 
 ```js
 // main.js
-const worker = new Worker('./worker.js')
-
-// To be shared
-const sharedBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 10)
-const sharedArray = new Int32Array(sharedBuffer) // (B)
-// Share sharedBuffer with the worker
-worker.postMessage(sharedArray)
-
-setTimeout(() => {
-  Atomics.store(sharedArray, 0, 123)
-  Atomics.wake(sharedArray, 0, 1)
-}, 1000)
+const work = new Worker('./worker.js')
+work.onmessage = function (e) {
+  let data = e.data
+  console.log(data) // Int32Array(10) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}
 ```
 
 ```js
 // worker.js
-onmessage = ({ data }) => {
-  console.log(data) // Int32Array(10) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  Atomics.wait(data, 0, 0)
-  // 1s 后
-  console.log(data) // Int32Array(10) [123, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-}
-// 或
-self.addEventListener('message', function (event) {
-  const { sharedBuffer } = event.data
-  // ...
-})
+const sharedBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 10)
+const sharedArray = new Int32Array(sharedBuffer) // (B)
+// Share sharedBuffer with the worker
+postMessage(sharedArray)
+console.log(sharedArray[0]) // Int32Array(10) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+setTimeout(() => {
+  sharedArray[0] = 5 // 5
+  // Atomics.store(typedArray, index, value) 将数组中指定的元素设置为给定的值，并返回该值。
+  // typedArray一个指定类型的shared数组. 类型为Int8Array,Uint8Array,Int16Array,Uint16Array,Int32Array,Uint32Array。
+  // index typedArray中用来存储value的位置.
+  // value要存储的数字.
+  console.log(Atomics.store(sharedArray, 0, 123)) // 123
+  // Atomics.add 将指定位置上的数组元素与给定的值相加，并返回相加前该元素的值。
+  console.log(Atomics.add(sharedArray, 0, 12)) // 123
+  // Atomics.load 返回数组中指定元素的值。
+  console.log(Atomics.load(sharedArray, 0)) // 135
+  console.log(sharedArray) // Int32Array(10) [135, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}, 1000)
 ```
 
 asm.js 是一种提升 js 执行效率的解决方案，甚至能让浏览器运行 3d 游戏，将 C/C++ 代码编译成 JS 代码
