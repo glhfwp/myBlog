@@ -23,7 +23,7 @@
 
       start.onclick = startwork;
       stop.onclick = function () {
-        work.terminate(); //终止 web worker，并释放资源
+        work && work.terminate(); //终止 web worker，并释放资源
         work = null;
       }
     }
@@ -38,7 +38,7 @@
         //监听事件，当web worker传递消息时，会执行事件监听器中的代码
         work.onmessage = function (e) {
           let data = e.data;
-          numdiv.innerHTML = data
+          // numdiv.innerHTML = data
           console.log(data) // Int32Array(10) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         }
       } else {

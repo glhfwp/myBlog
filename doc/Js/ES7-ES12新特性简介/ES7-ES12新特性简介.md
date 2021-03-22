@@ -339,6 +339,23 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expression
 
 Unicode property escapes 正则表达式 支持根据 Unicode 属性进行匹配，例如我们可以用它来匹配出表情、标点符号、字母(甚至适用特定语言或文字)等。同一符号可以拥有多种 Unicode 属性，属性则有 binary ("boolean-like") 和 non-binary 之分。
 
+语法：
+
+```js
+// Non-binary 属性
+\p{Unicode属性值}
+\p{Unicode属性名=Unicode属性值}
+
+// Binary and non-binary 属性
+\p{UnicodeBinary属性名}
+
+// \P 为 \p 取反
+\P{Unicode属性值}
+\P{UnicodeBinary属性名}
+```
+
+示例：
+
 ```js
 const sentence = 'A ticket to 大阪 costs ¥2000 👌.'
 
@@ -353,21 +370,6 @@ console.log(sentence.match(regexpNonLatin))
 const regexpCurrencyOrPunctuation = /\p{Sc}|\p{P}/gu
 console.log(sentence.match(regexpCurrencyOrPunctuation))
 // expected output: Array ["¥", "."]
-```
-
-语法：
-
-```js
-// Non-binary 属性
-\p{Unicode属性值}
-\p{Unicode属性名=Unicode属性值}
-
-// Binary and non-binary 属性
-\p{UnicodeBinary属性名}
-
-// \P 为 \p 取反
-\P{Unicode属性值}
-\P{UnicodeBinary属性名}
 ```
 
 ### 7. Promise.prototype.finally
@@ -859,7 +861,7 @@ import.meta 对象是由 ECMAScript 实现的，它带有一个 null 的原型�
 
 字符串全部替换
 
-replaceAll() 方法返回一个新字符串，新字符串所有满足 `pattern` 的部分都已被 `replacement` `替换。pattern` 可以是一个字符串或一个 `RegExp` ，`replacement` 可以是一个字符串或一个在每次匹配被调用的函数。
+replaceAll() 方法返回一个新字符串，新字符串所有满足 `pattern` 的部分都已被 `replacement` `替换。pattern` 可以是**一个字符串或一个 `RegExp`** ，`replacement` 可以是一个字符串或一个在每次匹配被调用的函数。
 
 ```js
 const p = 'The quick brown fox jumps over the lazy dog. If the dog reacted, was it really lazy?'
@@ -917,7 +919,7 @@ Promise.any([pErr]).catch(err => {
 })
 ```
 
-### 3. WeakRefs
+### 3. WeakRefs TODO:
 
 WeakRef 对象允许您保留对另一个对象的弱引用，而不会阻止被弱引用对象被 GC(垃圾回收)回收
 
@@ -937,6 +939,12 @@ Note: 在使用前请阅读 Avoid where possible，对于 WeakRef 对象的使�
 a ||= b // a = a || (a = b)
 a &&= b // a = a && (a = b)
 a ??= b // a = a ?? (a = b)
+
+const a = { duration: 50, title: '' }
+a.duration ||= 10
+console.log(a.duration) // 50
+a.title ||= 'title is empty'
+console.log(a.title) // "title is empty"
 ```
 
 ### 5. Numeric separators
@@ -944,14 +952,14 @@ a ??= b // a = a ?? (a = b)
 数字分隔符，可以在数字之间创建可视化分隔符，通过\_下划线来分割数字，使数字更具可读性
 
 ```js
-1_000_000_000 // Ah, so a billion
-101_475_938.38 // And this is hundreds of millions
+console.log(1_000_000_000) // 1000000000 千分符
+console.log(101_475_938.38) // 101475938.38
 
-let fee = 123_00 // $123 (12300 cents, apparently)
-let fee = 12_300 // $12,300 (woah, that fee!)
-let amount = 12345_00 // 12,345 (1234500 cents, apparently)
-let amount = 123_4500 // 123.45 (4-fixed financial)
-let amount = 1_234_500 // 1,234,500
+console.log(123_00) //12300
+console.log(12_300) // 12300
+console.log(12345_00) // 1234500
+console.log(123_4500) // 1234500
+console.log(1_234_500) // 1234500
 
 1_000_000_000 === 1000000000 // true
 ```
