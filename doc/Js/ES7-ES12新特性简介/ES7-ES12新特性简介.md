@@ -1,5 +1,20 @@
 # ES7-ES12 新特性简介
 
+## TC39 的 Stage 阶段进程
+
+```
+Stage 0: Strawperson 稻草人？
+  Just an idea -- 只是一个想法
+Stage 1: Proposal 提案
+  Describe shape of solution，Identify potential blockers -- 进入state1，面向委员会讲解和介绍，你需要概述解决方案，并且提出一些潜在的困难。
+Stage 2: Draft 草案
+  Describe precise syntactic and semantic details -- 进入state2的讨论会更加严肃，需要讨论精确的语法和语义细节
+Stage 3: Candidate 候选
+  Further feedback from implementations and users -- 收集来自实现者和用户的进一步反馈
+Stage 4: Finished 最终
+  Tested and ready for addition to the standard -- 测试好并准备好加入标准
+```
+
 ## ES7（2016）
 
 ### 1. Array.prototype.includes
@@ -551,9 +566,11 @@ let module = await import('/modules/my-module.js').then(module => {
 
 ### 3. BigInt
 
-新数据类型 BigInt 任意精度的整数
+新**基本数据类型** BigInt 任意精度的整数
 
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/BigInt
+
+现在是 7 种基本数据类型了，String、Number、Boolean、Null、Undefined、Symbol(ES6)、BigInt(ES11)
 
 Number 类型只能安全的表示 `Number.MIN_SAFE_INTEGER` `-(2 ** 53-1)`至 `Number.MAX_SAFE_INTEGER` `2 ** 53-1` 范围的值。js 使用 64 位浮点数处理所有计算，直接导致了运算效率低下，这个提案弥补了 js 的计算缺点
 
