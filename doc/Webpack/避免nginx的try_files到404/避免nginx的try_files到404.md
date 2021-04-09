@@ -2,7 +2,7 @@
 
 某服务器 nginx 配置 `try_files $uri =404` (或者根本就没写 try_files 配置)，H5 新增的一些路由部署后，访问显示 404，我们想要找到对应路由的静态文件 `index.html`，同时我们没有权限去改 nginx 规则。
 
-我们的测试或者预发服务器经常是这种情况，部署大量的静态资源项目到各个多级的文件夹下，而很少改动 nginx，不像线上单独部署或者混合部署基本都要改 nginx。这时候该怎么办呢？
+我们的测试或者预发服务器经常是这种情况，部署大量的静态资源项目到各个多级的文件夹下，而很少改动 nginx，不像线上单独部署或者混合部署基本都要改 nginx，找不到时指向对应的 index.html。这时候该怎么办呢？
 
 解决思路是： 匹配多路由目录下的 `index.html` 避免 `nginx` 的 `try_files` 后 404
 
@@ -37,7 +37,7 @@ location /abc  {
   location ~* .*\.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|webp|otf)$ {
     expires 30d;
   }
-  try_files $uri $uri/ /abc/index.html;
+  try_files $uri $uri/ /abc/index.html; # 线上的配置，测试预发机器一般没有配。
   # try_files $uri $uri/ =404;
   # try_files $uri $uri/ @abcd; # @xxx定义一个location段，不能被外部请求所访问，只能用于nginx内部配置指令使用，比如 try_files、error_page。
 }
