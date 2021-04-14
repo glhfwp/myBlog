@@ -259,6 +259,10 @@ else1page路由链接 http://www.xx.com/abc/pages/else/else1page/
 实际nginx查找 /export/www/abc/static/js/else.randomhash10.js
 ```
 
+**示例**
+
+[详见 /testvue2/util/create-html-webpack-plugin.js](https://github.com/glhfwp/myBlog/tree/main/test/vue/testvue2/util/create-html-webpack-plugin.js)
+
 ## 参考
 
 http://nginx.org/en/docs/http/ngx_http_core_module.html#try_files

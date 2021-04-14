@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-const Home = () => import(/* webpackPrefetch: true */ /* webpackChunkName: 'Home' */ '../views/Home')
-const TestVModel = () => import(/* webpackPrefetch: true */ /* webpackChunkName: "TestVModel" */ '../views/TestVModel')
+const Home = () => import(/* webpackPrefetch: true */ /* webpackChunkName: 'Home' */ '../views/home')
+const TestVModel = () => import(/* webpackPrefetch: true */ /* webpackChunkName: "TestVModel" */ '../views/testvmodel')
 
 const routes = [
   {

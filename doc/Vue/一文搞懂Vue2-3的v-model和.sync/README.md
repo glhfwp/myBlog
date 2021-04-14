@@ -197,7 +197,7 @@
 
 ### 4、 示例
 
-[详见/testvue2/src/views/TestVModel](https://github.com/glhfwp/myBlog/tree/main/test/vue/testvue2/src/views/TestVModel)
+[详见/testvue2/src/views/testvmodel](https://github.com/glhfwp/myBlog/tree/main/test/vue/testvue2/src/views/testvmodel)
 
 ## 二、 Vue3
 
