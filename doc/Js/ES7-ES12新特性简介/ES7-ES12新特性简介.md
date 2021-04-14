@@ -104,10 +104,10 @@ for (let i = 0; i < 1024; i++) {
 Object.getOwnPropertyDescriptors({ a: 1 })
 // {
 //   a: {
-//     configurable: true,
-//     enumberable: true,
+//     configurable: true, // 密封
+//     enumberable: true, // 枚举
 //     value: 1,
-//     writable: true,
+//     writable: true, // 冻结对象
 //   },
 // }
 Object.getOwnPropertyDescriptors({})
@@ -120,24 +120,26 @@ Object.getOwnPropertyDescriptors({})
 
 https://exploringjs.com/es2016-es2017/ch_trailing-comma-parameters.html
 
-```
+```js
 function foo(
   param1,
-  param2,  // 这里可以用逗号结尾
-) { /* ... */ };
+  param2, // 这里可以用逗号结尾
+) {
+  /* ... */
+}
 foo(
   'abc',
   'def', // 这里可以用逗号结尾
-);
+)
 let obj = {
   first: 'Jane',
   last: 'Doe', // 这里可以用逗号结尾
-};
+}
 let arr = [
   'red',
   'green',
-  'blue',
-];
+  'blue', // 这里可以用逗号结尾
+]
 ```
 
 ### 5. async/await
