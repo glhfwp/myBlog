@@ -86,6 +86,8 @@ class Compiler {
         { './hello.js': './src/hello.js' }
     */
 
+    // 4. AST 转换为 code
+    // 将 AST 语法树转换为浏览器可执行代码,我们这里使用@babel/core 和 @babel/preset-env。
     const code = getCode(ast)
     console.log('———code———————————————————————————————————')
     console.log(code)
