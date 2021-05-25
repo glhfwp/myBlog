@@ -67,6 +67,89 @@ class Compiler {
   }
   // 构建启动
   run() {
+    // 解析入口文件
+    const info = this.build(this.entry)
+    console.log('———info———————————————————————————————————')
+    console.log(info)
+    /*
+      无依赖：
+      {
+        filename: './src/index.js',
+        dependecies: {},
+        code: '"use strict";\n' +
+          '\n' +
+          '// import { say } from "./hello.js";\n' +
+          'document.write(say("webpack"));'
+      }
+      有依赖：
+      {
+        filename: './src/index.js',
+        dependecies: { './hello.js': './src/hello.js' },
+        code: '"use strict";\n' +
+          '\n' +
+          'var _hello = require("./hello.js");\n' +
+          '\n' +
+          'document.write((0, _hello.say)("webpack"));'
+      }
+    */
+
+    // 5. 递归解析所有依赖项,生成依赖关系图
+    this.modules.push(info)
+    this.modules.forEach(({ dependecies }) => {
+      // 判断有依赖对象,递归解析所有依赖项
+      if (dependecies) {
+        for (const dependency in dependecies) {
+          this.modules.push(this.build(dependecies[dependency]))
+        }
+      }
+    })
+    // 生成依赖关系图
+    const dependencyGraph = this.modules.reduce(
+      (graph, item) => ({
+        ...graph,
+        // 使用文件路径作为每个模块的唯一标识符,保存对应模块的依赖对象和文件内容
+        [item.filename]: {
+          dependecies: item.dependecies,
+          code: item.code
+        }
+      }),
+      {}
+    )
+    console.log('———dependencyGraph———————————————————————————————————')
+    console.log(dependencyGraph)
+    /*
+      无依赖：
+      {
+        './src/index.js': {
+          dependecies: {},
+          code: '"use strict";\n' +
+            '\n' +
+            '// import { say } from "./hello.js";\n' +
+            'document.write(say("webpack"));'
+        }
+      }
+      有依赖：
+      {
+        './src/index.js': {
+          dependecies: { './hello.js': './src/hello.js' },
+          code: '"use strict";\n' +
+            '\n' +
+            'var _hello = require("./hello.js");\n' +
+            '\n' +
+            'document.write((0, _hello.say)("webpack"));'
+        },
+        './src/hello.js': {
+          dependecies: { './hello.js': './src/hello.js' },
+          code: '"use strict";\n' +
+            '\n' +
+            'var _hello = require("./hello.js");\n' +
+            '\n' +
+            'document.write((0, _hello.say)("webpack"));'
+        }
+      }
+    */
+  }
+  build(filename) {
     const { getAst, getDependecies, getCode } = Parser
     // 2. 解析入口文件,获取 AST
     // 我们这里使用@babel/parser,这是 babel7 的工具,来帮助我们分析内部的语法,包括 es6,返回一个 AST 抽象语法树。
@@ -89,14 +172,14 @@ class Compiler {
     // 4. AST 转换为 code
     // 将 AST 语法树转换为浏览器可执行代码,我们这里使用@babel/core 和 @babel/preset-env。
     const code = getCode(ast)
-    console.log('———code———————————————————————————————————')
-    console.log(code)
+    // console.log('———code———————————————————————————————————')
+    // console.log(code)
     /*
       "use strict";
       var _hello = require("./hello.js");
       document.write((0, _hello.say)("webpack"));
     */
-    console.log({ code }) // 会自动把浏览器可执行代码转为字符串, 回车转\n
+    // console.log({ code }) // 会自动把浏览器可执行代码转为字符串, 回车转\n
     /*
       {
         code: '"use strict";\n' +
@@ -106,6 +189,11 @@ class Compiler {
           'document.write((0, _hello.say)("webpack"));'
       }
     */
+    return {
+      filename, // 文件路径,可以作为每个模块的唯一标识符
+      dependecies, // 依赖对象,保存着依赖模块路径
+      code, // 文件内容
+    }
   }
   // 重写 require函数,输出bundle
   generate() { }
