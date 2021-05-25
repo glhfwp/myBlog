@@ -69,8 +69,8 @@ class Compiler {
   run() {
     // 解析入口文件
     const info = this.build(this.entry)
-    console.log('———info———————————————————————————————————')
-    console.log(info)
+    // console.log('———info———————————————————————————————————')
+    // console.log(info)
     /*
       无依赖：
       {
@@ -115,8 +115,8 @@ class Compiler {
       }),
       {}
     )
-    console.log('———dependencyGraph———————————————————————————————————')
-    console.log(dependencyGraph)
+    // console.log('———dependencyGraph———————————————————————————————————')
+    // console.log(dependencyGraph)
     /*
       无依赖：
       {
