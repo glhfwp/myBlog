@@ -1,2 +1,2 @@
-import { say } from "./hello.js";
+// import { say } from "./hello.js";
 document.write(say("webpack"));
