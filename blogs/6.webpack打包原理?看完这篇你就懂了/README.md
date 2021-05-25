@@ -40,7 +40,9 @@ Compilation 继承 Tapable 对象，可以广播和监听 webpack 事件。
 Compilation 实例仅代表一次 webpack 构建和生成编译资源的的过程。
 webpack 开发模式开启 watch 选项，每次检测到入口文件模块变化时，会创建一次新的编译: 生成一次新的编译资源和新的 compilation 对象，这个 compilation 对象包含了当前编译的模块资源 module, 编译生成的资源，变化的文件, 依赖的的状态
 
-## 按步骤代码调试
+## 代码
+
+按步骤代码调试 看提交记录
 
 [testwebpack](https://github.com/glhfwp/myBlog/tree/main/blogs/6.webpack%E6%89%93%E5%8C%85%E5%8E%9F%E7%90%86%3F%E7%9C%8B%E5%AE%8C%E8%BF%99%E7%AF%87%E4%BD%A0%E5%B0%B1%E6%87%82%E4%BA%86/testwebpack)
 

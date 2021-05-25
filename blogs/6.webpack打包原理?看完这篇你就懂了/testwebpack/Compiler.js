@@ -4,6 +4,7 @@ const options = require('./webpack.config')
 const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 const { transformFromAst } = require('@babel/core')
+const { mkdirs } = require('./utils/mkdir')
 
 const Parser = {
   getAst: path => {
@@ -56,8 +57,8 @@ class Compiler {
     /*
       ./src/index.js
     */
-    // console.log('———output———————————————————————————————————')
-    // console.log(output)
+    console.log('———output———————————————————————————————————')
+    console.log(output)
     /*
       {
         path: '/Users/xxxxxxxx/testwebpack/dist',
@@ -148,6 +149,9 @@ class Compiler {
         }
       }
     */
+
+    // 6. 重写 require 函数,输出 bundle
+    this.generate(dependencyGraph)
   }
   build(filename) {
     const { getAst, getDependecies, getCode } = Parser
@@ -195,8 +199,36 @@ class Compiler {
       code, // 文件内容
     }
   }
-  // 重写 require函数,输出bundle
-  generate() { }
+  // 重写 require函数 (浏览器不能识别commonjs语法),输出bundle
+  generate(code) {
+    // !!注意先创建一个dist文件夹
+    mkdirs('./dist/', () => {
+      // 输出文件路径
+      const filePath = path.join(this.output.path, this.output.filename)
+      console.log('———filePath———————————————————————————————————')
+      console.log(filePath)
+      /*
+        /Users/xxxxxxxx/testwebpack/dist/main.js
+      */
+      // 懵逼了吗? 没事,下一节我们捋一捋
+      const bundle = `(function(graph){
+        function require(module){
+          function localRequire(relativePath){
+            return require(graph[module].dependecies[relativePath])
+          }
+          var exports = {};
+          (function(require,exports,code){
+            eval(code)
+          })(localRequire,exports,graph[module].code);
+          return exports;
+        }
+        require('${this.entry}')
+      })(${JSON.stringify(code)})`
+
+      // 把文件内容写入到文件系统
+      fs.writeFileSync(filePath, bundle, 'utf-8')
+    })
+  }
 }
 
 new Compiler(options).run()
