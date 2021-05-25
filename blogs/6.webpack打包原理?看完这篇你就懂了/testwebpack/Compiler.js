@@ -3,6 +3,7 @@ const path = require('path')
 const options = require('./webpack.config')
 const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
+const { transformFromAst } = require('@babel/core')
 
 const Parser = {
   getAst: path => {
@@ -29,6 +30,13 @@ const Parser = {
       }
     })
     return dependecies
+  },
+  getCode: ast => {
+    // AST转换为code
+    const { code } = transformFromAst(ast, null, {
+      presets: ['@babel/preset-env']
+    })
+    return code
   }
 }
 
@@ -59,7 +67,7 @@ class Compiler {
   }
   // 构建启动
   run() {
-    const { getAst, getDependecies } = Parser
+    const { getAst, getDependecies, getCode } = Parser
     // 2. 解析入口文件,获取 AST
     // 我们这里使用@babel/parser,这是 babel7 的工具,来帮助我们分析内部的语法,包括 es6,返回一个 AST 抽象语法树。
     const ast = getAst(this.entry)
@@ -69,17 +77,36 @@ class Compiler {
     // 3. 找出所有依赖模块
     // Babel 提供了@babel/traverse(遍历)方法维护这 AST 树的整体状态,我们这里使用它来帮我们找出依赖模块。
     const dependecies = getDependecies(ast, this.entry)
-    console.log('———dependecies———————————————————————————————————')
-    console.log(dependecies)
+    // console.log('———dependecies———————————————————————————————————')
+    // console.log(dependecies)
     /*
       无依赖时:
         {}
       有依赖时递归打印2次：
         { './hello.js': './src/hello.js' }
     */
+
+    const code = getCode(ast)
+    console.log('———code———————————————————————————————————')
+    console.log(code)
+    /*
+      "use strict";
+      var _hello = require("./hello.js");
+      document.write((0, _hello.say)("webpack"));
+    */
+    console.log({ code }) // 会自动把浏览器可执行代码转为字符串, 回车转\n
+    /*
+      {
+        code: '"use strict";\n' +
+          '\n' +
+          'var _hello = require("./hello.js");\n' +
+          '\n' +
+          'document.write((0, _hello.say)("webpack"));'
+      }
+    */
   }
   // 重写 require函数,输出bundle
-  generate() {}
+  generate() { }
 }
 
 new Compiler(options).run()
