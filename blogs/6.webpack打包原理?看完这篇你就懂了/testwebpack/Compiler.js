@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const options = require('./webpack.config')
+// const options = require('./webpack.config')
 const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 const { transformFromAst } = require('@babel/core')
@@ -57,8 +57,8 @@ class Compiler {
     /*
       ./src/index.js
     */
-    console.log('———output———————————————————————————————————')
-    console.log(output)
+    // console.log('———output———————————————————————————————————')
+    // console.log(output)
     /*
       {
         path: '/Users/xxxxxxxx/testwebpack/dist',
@@ -73,16 +73,6 @@ class Compiler {
     // console.log('———info———————————————————————————————————')
     // console.log(info)
     /*
-      无依赖：
-      {
-        filename: './src/index.js',
-        dependecies: {},
-        code: '"use strict";\n' +
-          '\n' +
-          '// import { say } from "./hello.js";\n' +
-          'document.write(say("webpack"));'
-      }
-      有依赖：
       {
         filename: './src/index.js',
         dependecies: { './hello.js': './src/hello.js' },
@@ -119,17 +109,6 @@ class Compiler {
     // console.log('———dependencyGraph———————————————————————————————————')
     // console.log(dependencyGraph)
     /*
-      无依赖：
-      {
-        './src/index.js': {
-          dependecies: {},
-          code: '"use strict";\n' +
-            '\n' +
-            '// import { say } from "./hello.js";\n' +
-            'document.write(say("webpack"));'
-        }
-      }
-      有依赖：
       {
         './src/index.js': {
           dependecies: { './hello.js': './src/hello.js' },
@@ -140,12 +119,17 @@ class Compiler {
             'document.write((0, _hello.say)("webpack"));'
         },
         './src/hello.js': {
-          dependecies: { './hello.js': './src/hello.js' },
+          dependecies: {},
           code: '"use strict";\n' +
             '\n' +
-            'var _hello = require("./hello.js");\n' +
+            'Object.defineProperty(exports, "__esModule", {\n' +
+            '  value: true\n' +
+            '});\n' +
+            'exports.say = say;\n' +
             '\n' +
-            'document.write((0, _hello.say)("webpack"));'
+            'function say(name) {\n' +
+            '  return "hello ".concat(name);\n' +
+            '}'
         }
       }
     */
@@ -167,10 +151,8 @@ class Compiler {
     // console.log('———dependecies———————————————————————————————————')
     // console.log(dependecies)
     /*
-      无依赖时:
-        {}
-      有依赖时递归打印2次：
-        { './hello.js': './src/hello.js' }
+      第一次有依赖时：  { './hello.js': './src/hello.js' }
+      第二次递归无依赖时：   {}
     */
 
     // 4. AST 转换为 code
@@ -179,9 +161,23 @@ class Compiler {
     // console.log('———code———————————————————————————————————')
     // console.log(code)
     /*
+      ———code———————————————————————————————————
       "use strict";
+
       var _hello = require("./hello.js");
+
       document.write((0, _hello.say)("webpack"));
+      ———code———————————————————————————————————
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.say = say;
+
+      function say(name) {
+        return "hello ".concat(name);
+      }
     */
     // console.log({ code }) // 会自动把浏览器可执行代码转为字符串, 回车转\n
     /*
@@ -191,6 +187,18 @@ class Compiler {
           'var _hello = require("./hello.js");\n' +
           '\n' +
           'document.write((0, _hello.say)("webpack"));'
+      }
+      {
+        code: '"use strict";\n' +
+          '\n' +
+          'Object.defineProperty(exports, "__esModule", {\n' +
+          '  value: true\n' +
+          '});\n' +
+          'exports.say = say;\n' +
+          '\n' +
+          'function say(name) {\n' +
+          '  return "hello ".concat(name);\n' +
+          '}'
       }
     */
     return {
@@ -205,8 +213,8 @@ class Compiler {
     mkdirs('./dist/', () => {
       // 输出文件路径
       const filePath = path.join(this.output.path, this.output.filename)
-      console.log('———filePath———————————————————————————————————')
-      console.log(filePath)
+      // console.log('———filePath———————————————————————————————————')
+      // console.log(filePath)
       /*
         /Users/xxxxxxxx/testwebpack/dist/main.js
       */
@@ -231,4 +239,5 @@ class Compiler {
   }
 }
 
-new Compiler(options).run()
+// new Compiler(options).run()
+module.exports = Compiler
