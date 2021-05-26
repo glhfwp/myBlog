@@ -157,7 +157,7 @@ class Compiler {
     const { getAst, getDependecies, getCode } = Parser
     // 2. 解析入口文件,获取 AST
     // 我们这里使用@babel/parser,这是 babel7 的工具,来帮助我们分析内部的语法,包括 es6,返回一个 AST 抽象语法树。
-    const ast = getAst(this.entry)
+    const ast = getAst(filename)
     // console.log('———ast———————————————————————————————————')
     // console.log(ast) // AST树
 
