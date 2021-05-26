@@ -48,7 +48,7 @@ webpack 开发模式开启 watch 选项，每次检测到入口文件模块变�
 
 按步骤代码调试 看提交记录
 
-[testwebpack](https://github.com/glhfwp/myBlog/tree/main/blogs/6.webpack%E6%89%93%E5%8C%85%E5%8E%9F%E7%90%86%3F%E7%9C%8B%E5%AE%8C%E8%BF%99%E7%AF%87%E4%BD%A0%E5%B0%B1%E6%87%82%E4%BA%86/testwebpack)
+[testwebpack](https://github.com/glhfwp/myBlog/tree/main/blogs/6.webpack%E6%89%93%E5%8C%85%E5%8E%9F%E7%90%86%E7%9C%8B%E5%AE%8C%E8%BF%99%E7%AF%87%E4%BD%A0%E5%B0%B1%E6%87%82%E4%BA%86/testwebpack)
 
 ## 参考
 
