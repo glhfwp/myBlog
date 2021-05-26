@@ -7,4 +7,4 @@
 3. [一文搞懂 Vue2-3 的 v-model 和.sync](https://github.com/glhfwp/myBlog/tree/main/blogs/3.%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82Vue2-3%E7%9A%84v-model%E5%92%8C.sync)
 4. [避免 nginx 的 try_files 到 404](https://github.com/glhfwp/myBlog/tree/main/blogs/4.%E9%81%BF%E5%85%8Dnginx%E7%9A%84try_files%E5%88%B0404)
 5. [Object.defineProperty+对象冻结](https://github.com/glhfwp/myBlog/tree/main/blogs/5.Object.defineProperty%2B%E5%AF%B9%E8%B1%A1%E5%86%BB%E7%BB%93)
-6. [webpack 打包原理?看完这篇你就懂了](https://github.com/glhfwp/myBlog/tree/main/blogs/6.webpack%E6%89%93%E5%8C%85%E5%8E%9F%E7%90%86%3F%E7%9C%8B%E5%AE%8C%E8%BF%99%E7%AF%87%E4%BD%A0%E5%B0%B1%E6%87%82%E4%BA%86)
+6. [webpack打包原理看完这篇你就懂了](https://github.com/glhfwp/myBlog/tree/main/blogs/6.webpack%E6%89%93%E5%8C%85%E5%8E%9F%E7%90%86%3F%E7%9C%8B%E5%AE%8C%E8%BF%99%E7%AF%87%E4%BD%A0%E5%B0%B1%E6%87%82%E4%BA%86)
