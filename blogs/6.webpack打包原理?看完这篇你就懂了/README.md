@@ -2,12 +2,12 @@
 
 ## webpack 核心概念
 
-entry: 编译入口
-output: 输出
-module: 模块，在 webpack 中，一切皆为模块，一个模块对应一个文件
-Chunk: 代码块，一个 chunk 由多个模块组合而成，用于代码的合并与分割
-Loader: 模块转换器，将非 js 模块转化为 webpack 能识别的 js 模块。将所有类型的文件,转换为应用程序的依赖图（和最终的 bundle）可以直接引用的模块。
-Plugin: 扩展插件，在 webpack 运行的各个阶段，都会广播出去相对应的事件，插件可以监听到这些事件的发生，在特定的时机做相对应的事情
+- entry: 编译入口
+- output: 输出
+- module: 模块，在 webpack 中，一切皆为模块，一个模块对应一个文件
+- Chunk: 代码块，一个 chunk 由多个模块组合而成，用于代码的合并与分割
+- Loader: 模块转换器，将非 js 模块转化为 webpack 能识别的 js 模块。将所有类型的文件,转换为应用程序的依赖图（和最终的 bundle）可以直接引用的模块。
+- Plugin: 扩展插件，在 webpack 运行的各个阶段，都会广播出去相对应的事件，插件可以监听到这些事件的发生，在特定的时机做相对应的事情
 
 ## webpack 基本概念对比
 
@@ -31,13 +31,17 @@ Plugin: 扩展插件，在 webpack 运行的各个阶段，都会广播出去相
 **Compiler**
 
 Compiler 继承 Tapable 对象，可以广播和监听 webpack 事件。
+
 Compiler 对象是 webpack 的编译器，webpack 周期中只存在一个 Compiler 对象。
+
 Compiler 对象在 webpack 启动时创建实例，compiler 实例中包含 webpack 的完整配置，包括 loaders, plugins 信息。
 
 **Compilation**
 
 Compilation 继承 Tapable 对象，可以广播和监听 webpack 事件。
+
 Compilation 实例仅代表一次 webpack 构建和生成编译资源的的过程。
+
 webpack 开发模式开启 watch 选项，每次检测到入口文件模块变化时，会创建一次新的编译: 生成一次新的编译资源和新的 compilation 对象，这个 compilation 对象包含了当前编译的模块资源 module, 编译生成的资源，变化的文件, 依赖的的状态
 
 ## 代码
