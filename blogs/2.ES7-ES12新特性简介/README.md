@@ -839,6 +839,8 @@ true || undefined ?? "foo"; // 抛出 SyntaxError
 
 ```js
 console.log(user.info?.name ?? '默认名字')
+// 等同于
+console.log(user.info?.name || '默认名字')
 ```
 
 ### 9. import.meta
